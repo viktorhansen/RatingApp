@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RatingApp.Models;
-using Newtonsoft.Json;
 
 namespace RatingApp.Controllers
 {
@@ -21,7 +20,7 @@ namespace RatingApp.Controllers
         }
 
         // GET api/ratings/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetRating")]
         public IActionResult Get(int id)
         {
             var item = _dataManager.GetById(id);
@@ -41,7 +40,7 @@ namespace RatingApp.Controllers
                 return BadRequest();
             }
             _dataManager.Add(item);
-            return CreatedAtRoute("Ratings", new { id = item.Id }, item);
+            return CreatedAtRoute("GetRating", new { id = item.Id }, item);
         }
 
         // PUT api/ratings/5
