@@ -14,6 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
+    <ApplicationInsightsResourceId>/subscriptions/7cfad774-cbb3-42a1-8429-4223248d781a/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/RatingApp</ApplicationInsightsResourceId>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet.Web\Microsoft.DotNet.Web.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
