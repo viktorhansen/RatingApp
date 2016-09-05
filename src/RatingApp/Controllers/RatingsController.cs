@@ -11,8 +11,8 @@ using Microsoft.OData;
 namespace RatingApp.Controllers
 {
     // Sets CORS config to global for entire controller
-    [EnableCors("AllowAnyOrigin")]
     // route for controller: api/ratings
+    [EnableCors("AllowAnyOrigin")]
     [Route("api/[controller]")]
     public class RatingsController : Controller
     {
