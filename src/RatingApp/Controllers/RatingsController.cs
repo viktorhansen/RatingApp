@@ -26,9 +26,9 @@ namespace RatingApp.Controllers
 
         // GET api/ratings
         [HttpGet]
-        public IEnumerable<Rating> Get()
+        public IActionResult Get()
         {
-            return RatingsRepo.GetAll();
+            return Ok(RatingsRepo.GetAll());
         }
 
         // GET api/ratings/5
