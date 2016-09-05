@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
+using RatingApp.Models;
 
 namespace RatingApp
 {
@@ -35,9 +37,18 @@ namespace RatingApp
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
-
-            services.AddMvc();
+            services
+                .AddApplicationInsightsTelemetry(Configuration)
+                // Adding config for accessing API, set to global at the moment... Might want to restrict this
+                .AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin",
+                    builder => builder.AllowAnyOrigin());
+            })
+                .AddMvc()
+                // Sets all JSON sent to CamelCasing, for universal use of clients
+                .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+                services.AddSingleton<IRatingsRepository, RatingsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -50,7 +61,7 @@ namespace RatingApp
 
             app.UseApplicationInsightsExceptionTelemetry();
 
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

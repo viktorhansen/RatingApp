@@ -2,28 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 using RatingApp.Models;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.OData;
 
 namespace RatingApp.Controllers
 {
+    // Sets CORS config to global for entire controller
+    [EnableCors("AllowAnyOrigin")]
+    // route for controller: api/ratings
     [Route("api/[controller]")]
     public class RatingsController : Controller
     {
-        DataManager _dataManager = new DataManager();
+        // Using the interface
+        public IRatingsRepository RatingsRepo { get; set; }
+
+        public RatingsController(IRatingsRepository repo)
+        {
+            RatingsRepo = repo;
+        }
 
         // GET api/ratings
         [HttpGet]
         public IEnumerable<Rating> Get()
         {
-            return _dataManager.GetAll();
+            return RatingsRepo.GetAll();
         }
 
         // GET api/ratings/5
         [HttpGet("{id}", Name = "GetRating")]
         public IActionResult Get(int id)
         {
-            var item = _dataManager.GetById(id);
+            var item = RatingsRepo.GetById(id);
             if (item == null)
             {
                 return NotFound();
@@ -39,7 +51,7 @@ namespace RatingApp.Controllers
             {
                 return BadRequest();
             }
-            _dataManager.Add(item);
+            RatingsRepo.Add(item);
             return CreatedAtRoute("GetRating", new { id = item.Id }, item);
         }
 
@@ -52,13 +64,13 @@ namespace RatingApp.Controllers
                 return BadRequest();
             }
 
-            var tmpItem = _dataManager.GetById(id);
+            var tmpItem = RatingsRepo.GetById(id);
             if (tmpItem == null)
             {
                 return NotFound();
             }
 
-            _dataManager.Update(item);
+            RatingsRepo.Update(item);
             return new NoContentResult();
         }
 
@@ -66,13 +78,13 @@ namespace RatingApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var item = _dataManager.GetById(id);
+            var item = RatingsRepo.GetById(id);
             if (item == null)
             {
                 return NotFound();
             }
 
-            _dataManager.Remove(id);
+            RatingsRepo.Remove(id);
             return new NoContentResult();
         }
     }
